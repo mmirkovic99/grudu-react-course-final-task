@@ -1,4 +1,4 @@
-.login {
+.signup {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -7,28 +7,23 @@
   height: 100vh;
 }
 
-.login .login__content {
+.signup .signup__content {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   width: 520px;
-  height: 382px;
+  height: 580px;
   border-radius: 8px;
   border: 2px solid #42434b;
 }
 
-.login .login__content .login__title {
+.signup .signup__content .signup__title {
   font-size: 28px;
   padding-bottom: 40px;
 }
 
-.login .login__content .login__error {
-  color: rgb(135, 3, 3);
-  width: 85%;
-}
-
-.login .login__content .login__button {
+.signup .signup__content .signup__button {
   background-color: #cbccd6;
   height: 55px;
   width: 139px;
@@ -38,14 +33,14 @@
   font-size: 28px;
 }
 
-.login .login__content .login__button-container {
+.signup .signup__content .signup__button-container {
   display: flex;
   align-items: center;
   justify-content: end;
   width: 90%;
 }
 
-.login .login__signup-link {
+.signup .signup__login-link {
   margin-top: 15px;
   font-size: 22px;
 }

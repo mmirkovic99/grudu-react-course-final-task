@@ -12,5 +12,16 @@
   border: 2px solid #42434b;
   font-size: 28px;
   padding-left: 20px;
-  margin: 10px 0;
+  margin: 10px;
+}
+
+.input__container .input__error {
+  border-color: rgb(135, 3, 3);
+}
+
+.input__container .input__error-label {
+  font-size: 12px;
+  display: block;
+  width: 90%;
+  color: rgb(135, 3, 3);
 }

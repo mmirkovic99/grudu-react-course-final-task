@@ -20,12 +20,12 @@ const CustomInput: React.FC<CustomInputProps> = ({
   return (
     <div className="input__container">
       <input
-        className="input__field"
+        className={`input__field ${error ? "input__error" : ""}`}
         type={type}
         placeholder={placeholder}
         onChange={onChange}
       />
-      {error && <span className="input__error">{error}</span>}
+      {error && <span className="input__error-label">{error}</span>}
     </div>
   );
 };

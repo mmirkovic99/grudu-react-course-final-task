@@ -1,6 +1,7 @@
 import "./Login.css";
 import CustomInput from "../../components/custom-input/CustomInput";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 interface LoginData {
   username: string;
@@ -66,6 +67,9 @@ const Login = () => {
             Log in
           </button>
         </div>
+      </div>
+      <div className="login__signup-link">
+        Don't have an account. <a href="/signup">Sign up</a>
       </div>
     </div>
   );
