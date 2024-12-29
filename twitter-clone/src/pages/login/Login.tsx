@@ -29,6 +29,12 @@ const Login = () => {
     }));
   };
 
+  const handleUsernameInputTouch = () => {
+    if (!loginState.username.value) {
+      setUsernameRequiredError();
+    }
+  };
+
   const handlePasswordChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ): void => {
@@ -39,6 +45,12 @@ const Login = () => {
         value: event.target.value,
       },
     }));
+  };
+
+  const handlePasswordInputTouch = () => {
+    if (!loginState.password.value) {
+      setPasswordRequiredError();
+    }
   };
 
   const setPasswordRequiredError = () => {
@@ -111,6 +123,7 @@ const Login = () => {
           placeholder="Username"
           error={loginState.username.error}
           onInputChange={handleUsernameChange}
+          onInputTouch={() => handleUsernameInputTouch()}
         ></CustomInput>
         <CustomInput
           value={loginState.password.value}
@@ -118,6 +131,7 @@ const Login = () => {
           type="password"
           placeholder="Password"
           onInputChange={handlePasswordChange}
+          onInputTouch={(event) => handlePasswordInputTouch()}
         ></CustomInput>
         {commonErrorMessage && (
           <span className="login__error">{commonErrorMessage}</span>
