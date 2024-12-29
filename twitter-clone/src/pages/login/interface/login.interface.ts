@@ -1,8 +1,6 @@
 import { FieldState } from "../../../common/interfaces/field.interface";
 
-export interface SignupData {
-  email: FieldState;
-  password: FieldState;
+export interface LoginState {
   username: FieldState;
-  fullName: FieldState;
+  password: FieldState;
 }

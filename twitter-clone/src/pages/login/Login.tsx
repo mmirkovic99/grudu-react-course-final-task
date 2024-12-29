@@ -1,49 +1,105 @@
 import "./Login.css";
 import CustomInput from "../../components/custom-input/CustomInput";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-
-interface LoginData {
-  username: string;
-  password: string;
-}
-
-const emptyData: LoginData = {
-  username: "",
-  password: "",
-};
+import { LoginState } from "./interface/login.interface";
+import { LOGIN_INITIAL_STATE } from "./constant/login.constant";
+import { MESSAGE } from "../../common/constants/message.constant";
+import { User } from "../../common/interfaces/user.interface";
+import { ENDPOINTS } from "../../common/constants/api.constants";
+import CustomButton from "../../components/custom-button/CustomButton";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../state/actions/userActions";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  let [loginData, setLoginData] = useState<LoginData>(emptyData);
-  let [error, setError] = useState<string>("");
+  const [loginState, setLoginState] = useState<LoginState>(LOGIN_INITIAL_STATE);
+  const [commonErrorMessage, setCommonErrorMessage] = useState<string>("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleUsernameChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>
   ): void => {
-    setLoginData({
-      ...loginData,
-      username: e.target.value,
-    });
+    setLoginState((prev) => ({
+      ...prev,
+      username: {
+        ...prev.username,
+        value: event.target.value,
+      },
+    }));
   };
 
   const handlePasswordChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>
   ): void => {
-    setLoginData({
-      ...loginData,
-      password: e.target.value,
-    });
+    setLoginState((prev) => ({
+      ...prev,
+      password: {
+        ...prev.password,
+        value: event.target.value,
+      },
+    }));
   };
 
-  const login = () => {
-    const { username, password } = loginData;
-    if (!username) {
-      setError("Username is required.");
+  const setPasswordRequiredError = () => {
+    setLoginState((prev) => ({
+      ...prev,
+      password: {
+        ...prev.password,
+        error: MESSAGE.PASSWORD_REQUIRED,
+      },
+    }));
+  };
+
+  const setUsernameRequiredError = () => {
+    setLoginState((prev) => ({
+      ...prev,
+      username: {
+        ...prev.username,
+        error: MESSAGE.USERNAME_REQUIRED,
+      },
+    }));
+  };
+
+  const resetErrorMessages = () => {
+    setLoginState((prev) => ({
+      ...prev,
+      username: {
+        ...prev.username,
+        error: "",
+      },
+      password: {
+        ...prev.password,
+        error: "",
+      },
+    }));
+    setCommonErrorMessage("");
+  };
+
+  const login = async () => {
+    resetErrorMessages();
+    const { username, password } = loginState;
+    if (password?.value && username?.value) {
+      const response = await fetch(`${ENDPOINTS.USERS}/${username.value}`);
+      if (!response.ok) {
+        setCommonErrorMessage(
+          response.status === 404
+            ? MESSAGE.USERNAME_PASSWORD_INVLAID
+            : MESSAGE.SYSTEM_ERROR
+        );
+        return;
+      }
+      const user: User = await response.json();
+      if (password.value !== user.password) {
+        setCommonErrorMessage(MESSAGE.USERNAME_PASSWORD_INVLAID);
+        return;
+      }
+      dispatch(setUser(user));
+      navigate("/twitter");
       return;
     }
-    if (!password) {
-      setError("Password is required.");
-      return;
-    }
+    if (!password.value) setPasswordRequiredError();
+    if (!username.value) setUsernameRequiredError();
   };
 
   return (
@@ -51,21 +107,23 @@ const Login = () => {
       <div className="login__content">
         <div className="login__title"> Log in</div>
         <CustomInput
-          value={loginData.username}
+          value={loginState.username.value}
           placeholder="Username"
-          onChange={handleUsernameChange}
+          error={loginState.username.error}
+          onInputChange={handleUsernameChange}
         ></CustomInput>
         <CustomInput
-          value={loginData.password}
+          value={loginState.password.value}
+          error={loginState.password.error}
           type="password"
           placeholder="Password"
-          onChange={handlePasswordChange}
+          onInputChange={handlePasswordChange}
         ></CustomInput>
-        {error && <span className="login__error">{error}</span>}
+        {commonErrorMessage && (
+          <span className="login__error">{commonErrorMessage}</span>
+        )}
         <div className="login__button-container">
-          <button className="login__button" onClick={login}>
-            Log in
-          </button>
+          <CustomButton label="Log in" onClick={login}></CustomButton>
         </div>
       </div>
       <div className="login__signup-link">

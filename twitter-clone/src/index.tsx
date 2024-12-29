@@ -6,6 +6,9 @@ import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Signup from "./pages/signup/Signup";
 import Login from "./pages/login/Login";
+import Twitter from "./pages/twitter/Twitter";
+import { Provider } from "react-redux";
+import store from "./state/store";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -19,11 +22,17 @@ const router = createBrowserRouter([
     path: "/signup",
     element: <Signup />,
   },
+  {
+    path: "/twitter",
+    element: <Twitter />,
+  },
 ]);
 
 ReactDOM.render(
   <React.StrictMode>
-    <RouterProvider router={router}></RouterProvider>
+    <Provider store={store}>
+      <RouterProvider router={router}></RouterProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );

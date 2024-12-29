@@ -9,7 +9,7 @@ export enum API_METHODS {
   CONNECT = "CONNECT",
 }
 
-export const API_BASE = "http://localhost:3000";
+export const API_BASE = "http://localhost:3001";
 
 export const ENDPOINTS = {
   USERS: `${API_BASE}/users`,

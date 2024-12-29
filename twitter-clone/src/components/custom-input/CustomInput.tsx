@@ -1,30 +1,59 @@
-import React from "react";
+import React, { useState } from "react";
 import "./CustomInput.css";
 
 interface CustomInputProps {
   type?: string;
   value: string;
   placeholder?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
-  onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onInputChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onTextAreaChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onInputTouch?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: string;
+  isRegularInput?: boolean;
 }
 
 const CustomInput: React.FC<CustomInputProps> = ({
   type = "text",
   placeholder,
-  onChange,
+  onInputChange,
+  onInputTouch,
+  onTextAreaChange,
   error = "",
+  isRegularInput = true,
+  value,
 }) => {
+  const [isTouched, setIsTouched] = useState(false);
+
+  const handleFocus = () => {
+    setIsTouched(true);
+  };
+
+  const handleBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (isTouched && onInputTouch) {
+      onInputTouch(event);
+    }
+  };
+
   return (
     <div className="input__container">
-      <input
-        className={`input__field ${error ? "input__error" : ""}`}
-        type={type}
-        placeholder={placeholder}
-        onChange={onChange}
-      />
+      {isRegularInput && (
+        <input
+          className={`input__field ${error ? "input__error" : ""}`}
+          type={type}
+          placeholder={placeholder}
+          onChange={onInputChange}
+          onFocus={() => handleFocus()}
+          onBlur={(event) => handleBlur(event)}
+        />
+      )}
+      {!isRegularInput && (
+        <textarea
+          value={value}
+          className={`input__teaxtarea ${error ? "input__error" : ""}`}
+          placeholder={placeholder}
+          onChange={onTextAreaChange}
+        ></textarea>
+      )}
       {error && <span className="input__error-label">{error}</span>}
     </div>
   );
