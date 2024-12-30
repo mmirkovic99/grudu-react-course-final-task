@@ -103,7 +103,7 @@ const Twitter = () => {
   };
 
   return (
-    <React.Fragment>
+    <>
       <HeaderNavigation></HeaderNavigation>
       <main>
         <div className="new-tweet">
@@ -126,7 +126,7 @@ const Twitter = () => {
           ))}
         </div>
       </main>
-    </React.Fragment>
+    </>
   );
 };
 
