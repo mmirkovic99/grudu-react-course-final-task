@@ -124,20 +124,20 @@ const Login = () => {
           error={loginState.username.error}
           onInputChange={handleUsernameChange}
           onInputTouch={() => handleUsernameInputTouch()}
-        ></CustomInput>
+        />
         <CustomInput
           value={loginState.password.value}
           error={loginState.password.error}
           type="password"
           placeholder="Password"
           onInputChange={handlePasswordChange}
-          onInputTouch={(event) => handlePasswordInputTouch()}
-        ></CustomInput>
+          onInputTouch={() => handlePasswordInputTouch()}
+        />
         {commonErrorMessage && (
           <span className="login__error">{commonErrorMessage}</span>
         )}
         <div className="login__button-container">
-          <CustomButton label="Log in" onClick={login}></CustomButton>
+          <CustomButton label="Log in" onClick={login} />
         </div>
       </div>
       <div className="login__signup-link">

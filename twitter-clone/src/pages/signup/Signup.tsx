@@ -289,10 +289,10 @@ const Signup = () => {
             onInputTouch={() => {
               handleInputFocus(label);
             }}
-          ></CustomInput>
+          />
         ))}
         <div className="signup__button-container">
-          <CustomButton label="Sign up" onClick={signup}></CustomButton>
+          <CustomButton label="Sign up" onClick={signup} />
         </div>
       </div>
       <div className="signup__login-link">

@@ -104,7 +104,7 @@ const Twitter = () => {
 
   return (
     <>
-      <HeaderNavigation></HeaderNavigation>
+      <HeaderNavigation />
       <main>
         <div className="new-tweet">
           <CustomInput
@@ -113,16 +113,12 @@ const Twitter = () => {
             onTextAreaChange={handleInputChange}
             isRegularInput={false}
             error={error}
-          ></CustomInput>
-          <CustomButton label="Tweet" onClick={createTweet}></CustomButton>
+          />
+          <CustomButton label="Tweet" onClick={createTweet} />
         </div>
         <div className="tweets">
           {tweets.map((item, index) => (
-            <TweetCard
-              key={index}
-              author={item.author_name}
-              text={item.text}
-            ></TweetCard>
+            <TweetCard key={index} author={item.author_name} text={item.text} />
           ))}
         </div>
       </main>
