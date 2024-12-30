@@ -14,5 +14,4 @@ export enum MESSAGE {
   USERNAME_PASSWORD_INVLAID = "Invalid username or password.",
   TWEET_INVALID_MIN_LENGTH = "Invalid tweet. Tweet must contain at least one symbol.",
   TWEET_INVALID_MAX_LENGTH = "Invalid tweet. Tweet must contain at most 140 symbols.",
-  SYSTEM_ERROR = "System Error.",
 }

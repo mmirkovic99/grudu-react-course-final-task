@@ -1,6 +1,6 @@
 import { useState } from "react";
 import CustomInput from "../../components/custom-input/CustomInput";
-import "./Signup.css";
+import "../../styles/Container.css";
 import { SignupData } from "./interfaces/signup.interfaces";
 import {
   SIGNUP_INPUT_FILEDS,
@@ -99,9 +99,9 @@ const Signup = () => {
   };
 
   return (
-    <div className="signup">
-      <div className="signup__content">
-        <div className="signup__title"> Sign up</div>
+    <div className="container">
+      <div className="container__content">
+        <div className="container__title"> Sign up</div>
         {Object.entries(SIGNUP_INPUT_FILEDS).map(([key, label]) => (
           <CustomInput
             key={key}
@@ -117,11 +117,11 @@ const Signup = () => {
             }}
           />
         ))}
-        <div className="signup__button-container">
+        <div className="container__button-container">
           <CustomButton label="Sign up" onClick={signup} />
         </div>
       </div>
-      <div className="signup__login-link">
+      <div className="container__link">
         Already have an account? <a href="/login">Log in</a>
       </div>
     </div>

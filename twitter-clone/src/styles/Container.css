@@ -1,4 +1,4 @@
-.login {
+.container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -7,37 +7,36 @@
   height: 100vh;
 }
 
-.login .login__content {
+.container .container__content {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  width: 520px;
-  height: 382px;
+  padding: 22px 21px;
   border-radius: 8px;
   border: 2px solid #42434b;
 }
 
-.login .login__content .login__title {
+.container .container__content .container__title {
   font-size: 28px;
   padding-bottom: 40px;
 }
 
-.login .login__content .login__error {
+.container .container__content .container__error {
   font-size: 12px;
   display: block;
   width: 85%;
   color: rgb(135, 3, 3);
 }
 
-.login .login__content .login__button-container {
+.container .container__content .container__button-container {
   display: flex;
   align-items: center;
   justify-content: end;
   width: 90%;
 }
 
-.login .login__signup-link {
+.container .container__link {
   margin-top: 15px;
   font-size: 22px;
 }

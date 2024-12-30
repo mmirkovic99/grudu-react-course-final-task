@@ -1,4 +1,4 @@
-import "./Login.css";
+import "../../styles/Container.css";
 import CustomInput from "../../components/custom-input/CustomInput";
 import { useState } from "react";
 import { LoginState } from "./interface/login.interface";
@@ -40,9 +40,9 @@ const Login = () => {
   };
 
   return (
-    <div className="login">
-      <div className="login__content">
-        <div className="login__title"> Log in</div>
+    <div className="container">
+      <div className=" container__content">
+        <div className="container__title"> Log in</div>
         <CustomInput
           value={loginState.username.value}
           placeholder="Username"
@@ -59,13 +59,13 @@ const Login = () => {
           onInputTouch={() => handleInputTouch("password")}
         />
         {commonErrorMessage && (
-          <span className="login__error">{commonErrorMessage}</span>
+          <span className="container__error">{commonErrorMessage}</span>
         )}
-        <div className="login__button-container">
+        <div className="container__button-container">
           <CustomButton label="Log in" onClick={login} />
         </div>
       </div>
-      <div className="login__signup-link">
+      <div className="container__link">
         Don't have an account? <a href="/signup">Sign up</a>
       </div>
     </div>
