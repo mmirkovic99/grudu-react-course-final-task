@@ -5,12 +5,12 @@ import { LoginState } from "./interface/login.interface";
 import { LOGIN_INITIAL_STATE } from "./constant/login.constant";
 import { MESSAGE } from "../../common/constants/message.constant";
 import { User } from "../../common/interfaces/user.interface";
-import { ENDPOINTS } from "../../common/constants/api.constants";
 import CustomButton from "../../components/custom-button/CustomButton";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../state/actions/userActions";
 import { useNavigate } from "react-router-dom";
 import { apiService } from "../../services/apiService";
+import useInputHandlers from "../../hooks/InputHandlers";
 
 const Login = () => {
   const [loginState, setLoginState] = useState<LoginState>(LOGIN_INITIAL_STATE);
@@ -18,76 +18,8 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleUsernameChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    setLoginState((prev) => ({
-      ...prev,
-      username: {
-        ...prev.username,
-        value: event.target.value,
-      },
-    }));
-  };
-
-  const handleUsernameInputTouch = () => {
-    if (!loginState.username.value) {
-      setUsernameRequiredError();
-    }
-  };
-
-  const handlePasswordChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    setLoginState((prev) => ({
-      ...prev,
-      password: {
-        ...prev.password,
-        value: event.target.value,
-      },
-    }));
-  };
-
-  const handlePasswordInputTouch = () => {
-    if (!loginState.password.value) {
-      setPasswordRequiredError();
-    }
-  };
-
-  const setPasswordRequiredError = () => {
-    setLoginState((prev) => ({
-      ...prev,
-      password: {
-        ...prev.password,
-        error: MESSAGE.PASSWORD_REQUIRED,
-      },
-    }));
-  };
-
-  const setUsernameRequiredError = () => {
-    setLoginState((prev) => ({
-      ...prev,
-      username: {
-        ...prev.username,
-        error: MESSAGE.USERNAME_REQUIRED,
-      },
-    }));
-  };
-
-  const resetErrorMessages = () => {
-    setLoginState((prev) => ({
-      ...prev,
-      username: {
-        ...prev.username,
-        error: "",
-      },
-      password: {
-        ...prev.password,
-        error: "",
-      },
-    }));
-    setCommonErrorMessage("");
-  };
+  const { handleInputChange, handleInputTouch, resetErrorMessages, setError } =
+    useInputHandlers(loginState, setLoginState);
 
   const login = async () => {
     try {
@@ -100,8 +32,8 @@ const Login = () => {
           navigate("/twitter");
         }
       }
-      if (!password.value) setPasswordRequiredError();
-      if (!username.value) setUsernameRequiredError();
+      if (!password.value) setError("password", MESSAGE.PASSWORD_REQUIRED);
+      if (!username.value) setError("username", MESSAGE.USERNAME_REQUIRED);
     } catch (error: any) {
       setCommonErrorMessage(error.message);
     }
@@ -115,16 +47,16 @@ const Login = () => {
           value={loginState.username.value}
           placeholder="Username"
           error={loginState.username.error}
-          onInputChange={handleUsernameChange}
-          onInputTouch={() => handleUsernameInputTouch()}
+          onInputChange={(e) => handleInputChange("username", e)}
+          onInputTouch={() => handleInputTouch("username")}
         />
         <CustomInput
           value={loginState.password.value}
           error={loginState.password.error}
           type="password"
           placeholder="Password"
-          onInputChange={handlePasswordChange}
-          onInputTouch={() => handlePasswordInputTouch()}
+          onInputChange={(e) => handleInputChange("password", e)}
+          onInputTouch={() => handleInputTouch("password")}
         />
         {commonErrorMessage && (
           <span className="login__error">{commonErrorMessage}</span>
@@ -134,7 +66,7 @@ const Login = () => {
         </div>
       </div>
       <div className="login__signup-link">
-        Don't have an account. <a href="/signup">Sign up</a>
+        Don't have an account? <a href="/signup">Sign up</a>
       </div>
     </div>
   );

@@ -2,26 +2,24 @@ import { useEffect, useState } from "react";
 import HeaderNavigation from "../../components/header-navigation/HeaderNavigation";
 import "./Twitter.css";
 import CustomInput from "../../components/custom-input/CustomInput";
-import React from "react";
 import CustomButton from "../../components/custom-button/CustomButton";
 import TweetCard from "../../components/tweet/Tweet";
 import { Tweet } from "../../common/interfaces/tweet.interface";
 import { User } from "../../common/interfaces/user.interface";
-import { TWEET_RESTRICTIONS } from "../../common/constants/restrictions.constants";
-import { MESSAGE } from "../../common/constants/message.constant";
 import { useSelector } from "react-redux";
 import { ExtendedTweet } from "./interface/twitter.interface";
-import { NEW_TWEET_INITIAL_STATE } from "./constant/twitter.constant";
+import { NEW_TWEET_INIT_STATE } from "./constant/twitter.constant";
 import { apiService } from "../../services/apiService";
+import useInputHandlers from "../../hooks/InputHandlers";
+import { validatorService } from "../../services/validatorService";
 
 const Twitter = () => {
   const userName = useSelector((state: any) => state.user.name);
   const userId = useSelector((state: any) => state.user.id);
-  const [newTweet, setNewTweet] = useState<ExtendedTweet>(
-    NEW_TWEET_INITIAL_STATE
-  );
-  const [error, setError] = useState<string>("");
+  const [newTweetState, setNewTweetState] = useState(NEW_TWEET_INIT_STATE);
   const [tweets, setTweets] = useState<ExtendedTweet[]>([]);
+  const { handleInputChange, resetErrorMessages, resetState, setError } =
+    useInputHandlers(newTweetState, setNewTweetState);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,15 +34,6 @@ const Twitter = () => {
     };
     fetchData();
   }, []);
-
-  useEffect(() => {
-    setNewTweet({
-      id: (tweets.length + 1).toString(),
-      author_id: userId,
-      text: "",
-      author_name: userName,
-    });
-  }, [tweets]);
 
   const resolveAuthorNames = (users: User[], tweets: Tweet[]) => {
     const tweetsWithFullAuthorName: ExtendedTweet[] = [];
@@ -65,36 +54,27 @@ const Twitter = () => {
     return tweetsWithFullAuthorName.reverse();
   };
 
-  const isTweetValid = (tweet: string) => {
-    if (tweet.length < TWEET_RESTRICTIONS.minLenght) {
-      setError(MESSAGE.TWEET_INVALID_MIN_LENGTH);
-      return false;
-    }
-    if (tweet.length > TWEET_RESTRICTIONS.maxLength) {
-      setError(MESSAGE.TWEET_INVALID_MAX_LENGTH);
-      return false;
-    }
-    return true;
-  };
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setNewTweet((prev) => ({
-      ...prev,
-      text: event.target.value,
-    }));
-  };
-
   const createTweet = async () => {
     try {
-      if (error) setError("");
-      if (!isTweetValid(newTweet.text)) return;
-      const data: Tweet = {
-        id: newTweet.id,
-        author_id: newTweet.author_id,
-        text: newTweet.text,
-      };
-      await apiService.saveTweet(data);
-      setTweets((prevTweets) => [newTweet, ...prevTweets]);
+      resetErrorMessages();
+      const { newTweet } = newTweetState;
+      const tweetMessage = validatorService.checkTweet(newTweet.value);
+      if (!tweetMessage) {
+        const tweet = {
+          id: (tweets.length + 1).toString(),
+          author_id: userId,
+          text: newTweet.value,
+        };
+        await apiService.saveTweet(tweet);
+        const extendedTweet = {
+          ...tweet,
+          author_name: userName,
+        };
+        setTweets((prev) => [extendedTweet, ...prev]);
+        resetState();
+      } else {
+        setError("newTweet", tweetMessage);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -106,11 +86,11 @@ const Twitter = () => {
       <main>
         <div className="new-tweet">
           <CustomInput
-            value={newTweet.text}
+            value={newTweetState.newTweet.value}
             placeholder="What’s happening?"
-            onTextAreaChange={handleInputChange}
+            onTextAreaChange={(event) => handleInputChange("newTweet", event)}
             isRegularInput={false}
-            error={error}
+            error={newTweetState.newTweet.error}
           />
           <CustomButton label="Tweet" onClick={createTweet} />
         </div>

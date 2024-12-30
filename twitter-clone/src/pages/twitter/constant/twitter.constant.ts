@@ -1,8 +1,7 @@
-import { ExtendedTweet } from "../interface/twitter.interface";
-
-export const NEW_TWEET_INITIAL_STATE: ExtendedTweet = {
-  author_name: "",
-  author_id: "",
-  id: "",
-  text: "",
+import { TwitterState } from "../interface/twitter.interface";
+export const NEW_TWEET_INIT_STATE: TwitterState = {
+  newTweet: {
+    value: "",
+    error: "",
+  },
 };
