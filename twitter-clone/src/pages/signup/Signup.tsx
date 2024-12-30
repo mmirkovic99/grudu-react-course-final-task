@@ -18,6 +18,7 @@ import { User } from "../../common/interfaces/user.interface";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "../../state/actions/userActions";
+import { apiService } from "../../services/apiService";
 
 const Signup = () => {
   const [signupData, setSignupData] = useState<SignupData>(signupEmptyState);
@@ -191,10 +192,9 @@ const Signup = () => {
         setUsernameRequiredError();
         return false;
       }
-      const response = await fetch(`${ENDPOINTS.USERS}`);
-      const users: User[] = await response.json();
+      const users: User[] = await apiService.getAllUsers();
       let isUsernameAvailable = true;
-      if (users?.length && response.ok) {
+      if (users?.length) {
         isUsernameAvailable = !users.find((user) => user.id === username);
       }
       if (!isUsernameAvailable) {
@@ -237,38 +237,32 @@ const Signup = () => {
     return true;
   };
 
-  const saveUserData = (user: User) => {
-    const options = {
-      method: API_METHODS.POST,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    };
-    fetch(`${ENDPOINTS.USERS}`, options)
-      .then((response) => response.json())
-      .then((user) => {
+  const signup = async () => {
+    try {
+      resetErrors();
+      const { email, password, username, fullName } = signupData;
+      const isEmailValid = checkEmailAddress(email.value);
+      const isUsernameValid = await checkUsername(username.value);
+      const isPasswordValid = checkPassword(password.value);
+      const isFullNameValid = checkFullName(fullName.value);
+      if (
+        isEmailValid &&
+        isPasswordValid &&
+        isUsernameValid &&
+        isFullNameValid
+      ) {
+        const user: User = {
+          email: email.value,
+          password: password.value,
+          id: username.value,
+          name: fullName.value,
+        };
+        await apiService.saveUser(user);
         dispatch(setUser(user));
         navigate("/twitter");
-      })
-      .catch((error) => console.error("Error fetching data:", error));
-  };
-
-  const signup = async () => {
-    resetErrors();
-    const { email, password, username, fullName } = signupData;
-    const isEmailValid = checkEmailAddress(email.value);
-    const isUsernameValid = await checkUsername(username.value);
-    const isPasswordValid = checkPassword(password.value);
-    const isFullNameValid = checkFullName(fullName.value);
-    if (isEmailValid && isPasswordValid && isUsernameValid && isFullNameValid) {
-      const user: User = {
-        email: email.value,
-        password: password.value,
-        id: username.value,
-        name: fullName.value,
-      };
-      saveUserData(user);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 

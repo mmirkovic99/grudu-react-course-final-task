@@ -4,7 +4,6 @@ import "./Twitter.css";
 import CustomInput from "../../components/custom-input/CustomInput";
 import React from "react";
 import CustomButton from "../../components/custom-button/CustomButton";
-import { API_METHODS, ENDPOINTS } from "../../common/constants/api.constants";
 import TweetCard from "../../components/tweet/Tweet";
 import { Tweet } from "../../common/interfaces/tweet.interface";
 import { User } from "../../common/interfaces/user.interface";
@@ -13,6 +12,7 @@ import { MESSAGE } from "../../common/constants/message.constant";
 import { useSelector } from "react-redux";
 import { ExtendedTweet } from "./interface/twitter.interface";
 import { NEW_TWEET_INITIAL_STATE } from "./constant/twitter.constant";
+import { apiService } from "../../services/apiService";
 
 const Twitter = () => {
   const userName = useSelector((state: any) => state.user.name);
@@ -25,15 +25,18 @@ const Twitter = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const tweetsResponse = await fetch(`${ENDPOINTS.TWEETS}`);
-      const tweets: Tweet[] = await tweetsResponse.json();
-      const usersResponse = await fetch(`${ENDPOINTS.USERS}`);
-      const users = await usersResponse.json();
-      const extendedTweets = resolveAuthorNames(users, tweets);
-      setTweets(extendedTweets);
+      try {
+        const tweets: Tweet[] = await apiService.getAllTweets();
+        const users = await apiService.getAllUsers();
+        const extendedTweets = resolveAuthorNames(users, tweets);
+        setTweets(extendedTweets);
+      } catch (error) {
+        console.log(error);
+      }
     };
     fetchData();
   }, []);
+
   useEffect(() => {
     setNewTweet({
       id: (tweets.length + 1).toString(),
@@ -82,23 +85,18 @@ const Twitter = () => {
   };
 
   const createTweet = async () => {
-    if (error) setError("");
-    if (!isTweetValid(newTweet.text)) return;
-    const data: Tweet = {
-      id: newTweet.id,
-      author_id: newTweet.author_id,
-      text: newTweet.text,
-    };
-    const options = {
-      method: API_METHODS.POST,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    };
-    const response = await fetch(`${ENDPOINTS.TWEETS}`, options);
-    if (response.ok) {
+    try {
+      if (error) setError("");
+      if (!isTweetValid(newTweet.text)) return;
+      const data: Tweet = {
+        id: newTweet.id,
+        author_id: newTweet.author_id,
+        text: newTweet.text,
+      };
+      await apiService.saveTweet(data);
       setTweets((prevTweets) => [newTweet, ...prevTweets]);
+    } catch (error) {
+      console.error(error);
     }
   };
 

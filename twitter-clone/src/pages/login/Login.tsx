@@ -10,6 +10,7 @@ import CustomButton from "../../components/custom-button/CustomButton";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../state/actions/userActions";
 import { useNavigate } from "react-router-dom";
+import { apiService } from "../../services/apiService";
 
 const Login = () => {
   const [loginState, setLoginState] = useState<LoginState>(LOGIN_INITIAL_STATE);
@@ -89,29 +90,21 @@ const Login = () => {
   };
 
   const login = async () => {
-    resetErrorMessages();
-    const { username, password } = loginState;
-    if (password?.value && username?.value) {
-      const response = await fetch(`${ENDPOINTS.USERS}/${username.value}`);
-      if (!response.ok) {
-        setCommonErrorMessage(
-          response.status === 404
-            ? MESSAGE.USERNAME_PASSWORD_INVLAID
-            : MESSAGE.SYSTEM_ERROR
-        );
-        return;
+    try {
+      resetErrorMessages();
+      const { username, password } = loginState;
+      if (username?.value && password?.value) {
+        const user: User = await apiService.getUserByUsername(username.value);
+        if (user.password === password.value) {
+          dispatch(setUser(user));
+          navigate("/twitter");
+        }
       }
-      const user: User = await response.json();
-      if (password.value !== user.password) {
-        setCommonErrorMessage(MESSAGE.USERNAME_PASSWORD_INVLAID);
-        return;
-      }
-      dispatch(setUser(user));
-      navigate("/twitter");
-      return;
+      if (!password.value) setPasswordRequiredError();
+      if (!username.value) setUsernameRequiredError();
+    } catch (error: any) {
+      setCommonErrorMessage(error.message);
     }
-    if (!password.value) setPasswordRequiredError();
-    if (!username.value) setUsernameRequiredError();
   };
 
   return (
