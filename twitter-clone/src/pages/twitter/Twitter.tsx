@@ -31,15 +31,17 @@ const Twitter = () => {
       const users = await usersResponse.json();
       const extendedTweets = resolveAuthorNames(users, tweets);
       setTweets(extendedTweets);
-      setNewTweet({
-        id: (tweets.length + 1).toString(),
-        author_id: userId,
-        text: "",
-        author_name: userName,
-      });
     };
     fetchData();
   }, []);
+  useEffect(() => {
+    setNewTweet({
+      id: (tweets.length + 1).toString(),
+      author_id: userId,
+      text: "",
+      author_name: userName,
+    });
+  }, [tweets]);
 
   const resolveAuthorNames = (users: User[], tweets: Tweet[]) => {
     const tweetsWithFullAuthorName: ExtendedTweet[] = [];
@@ -97,10 +99,6 @@ const Twitter = () => {
     const response = await fetch(`${ENDPOINTS.TWEETS}`, options);
     if (response.ok) {
       setTweets((prevTweets) => [newTweet, ...prevTweets]);
-      setNewTweet((prev) => ({
-        ...prev,
-        text: "",
-      }));
     }
   };
 
