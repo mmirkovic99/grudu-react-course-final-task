@@ -195,7 +195,7 @@ const Signup = () => {
       const users: User[] = await response.json();
       let isUsernameAvailable = true;
       if (users?.length && response.ok) {
-        isUsernameAvailable = !!users.find((user) => user.id !== username);
+        isUsernameAvailable = !users.find((user) => user.id === username);
       }
       if (!isUsernameAvailable) {
         setSignupData((prev) => ({
