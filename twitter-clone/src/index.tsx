@@ -7,8 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Signup from "./pages/signup/Signup";
 import Login from "./pages/login/Login";
 import Twitter from "./pages/twitter/Twitter";
-import { Provider } from "react-redux";
-import store from "./state/store";
+import { UserProvider } from "./context/UserContext";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -30,9 +29,9 @@ const router = createBrowserRouter([
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
+    <UserProvider>
       <RouterProvider router={router}></RouterProvider>
-    </Provider>
+    </UserProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

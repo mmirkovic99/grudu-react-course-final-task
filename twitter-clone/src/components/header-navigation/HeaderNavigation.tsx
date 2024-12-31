@@ -1,12 +1,13 @@
-import { useSelector } from "react-redux";
 import "./HeaderNavigation.css";
+import { useContext } from "react";
+import { UserContext } from "../../context/UserContext";
 
 const HeaderNavigation = () => {
-  const userName = useSelector((state: any) => state.user.name);
+  const { user } = useContext(UserContext) || { user: null };
 
   const getUsersInitials = () => {
-    const spaceIndex = userName.indexOf(" ");
-    const userNamesInitials = `${userName.charAt(0)}${userName.charAt(
+    const spaceIndex = user?.name.indexOf(" ") || -1;
+    const userNamesInitials = `${user?.name.charAt(0)}${user?.name.charAt(
       spaceIndex + 1
     )}`;
     return userNamesInitials;
@@ -31,7 +32,7 @@ const HeaderNavigation = () => {
         <div className="logo-container__text">Another Twitter Clone</div>
       </div>
       <div className="user-container">
-        <span className="user-container__name">{userName}</span>
+        <span className="user-container__name">{user?.name}</span>
         <div className="user-container__avatar">{getUsersInitials()}</div>
       </div>
     </header>

@@ -1,21 +1,20 @@
 import "../../styles/Container.css";
 import CustomInput from "../../components/custom-input/CustomInput";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { LoginState } from "./interface/login.interface";
 import { LOGIN_INITIAL_STATE } from "./constant/login.constant";
 import { MESSAGE } from "../../common/constants/message.constant";
 import { User } from "../../common/interfaces/user.interface";
 import CustomButton from "../../components/custom-button/CustomButton";
-import { useDispatch } from "react-redux";
-import { setUser } from "../../state/actions/userActions";
 import { useNavigate } from "react-router-dom";
 import { apiService } from "../../services/apiService";
 import useInputHandlers from "../../hooks/InputHandlers";
+import { UserContext } from "../../context/UserContext";
 
 const Login = () => {
   const [loginState, setLoginState] = useState<LoginState>(LOGIN_INITIAL_STATE);
   const [commonErrorMessage, setCommonErrorMessage] = useState<string>("");
-  const dispatch = useDispatch();
+  const { setUser } = useContext(UserContext) || { setUser: () => {} };
   const navigate = useNavigate();
 
   const { handleInputChange, handleInputTouch, resetErrorMessages, setError } =
@@ -28,7 +27,7 @@ const Login = () => {
       if (username?.value && password?.value) {
         const user: User = await apiService.getUserByUsername(username.value);
         if (user.password === password.value) {
-          dispatch(setUser(user));
+          setUser(user);
           navigate("/twitter");
         }
       }

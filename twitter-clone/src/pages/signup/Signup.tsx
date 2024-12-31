@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import CustomInput from "../../components/custom-input/CustomInput";
 import "../../styles/Container.css";
 import { SignupData } from "./interfaces/signup.interfaces";
@@ -8,16 +8,16 @@ import {
 } from "./constants/signup.constants";
 import CustomButton from "../../components/custom-button/CustomButton";
 import { User } from "../../common/interfaces/user.interface";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setUser } from "../../state/actions/userActions";
 import { apiService } from "../../services/apiService";
 import { validatorService } from "../../services/validatorService";
 import useInputHandlers from "../../hooks/InputHandlers";
+import { UserContext } from "../../context/UserContext";
 
 const Signup = () => {
   const [signupData, setSignupData] = useState<SignupData>(signupEmptyState);
-  const dispatch = useDispatch();
+  const [commonErrorMessage, setCommonErrorMessage] = useState<string>("");
+  const { setUser } = useContext(UserContext) || { setUser: () => {} };
   const navigate = useNavigate();
 
   const { handleInputChange, handleInputTouch, resetErrorMessages, setError } =
@@ -85,7 +85,7 @@ const Signup = () => {
           name: fullName.value,
         };
         await apiService.saveUser(user);
-        dispatch(setUser(user));
+        setUser(user);
         navigate("/twitter");
       } else {
         setError("email", emailMessage);
@@ -93,8 +93,8 @@ const Signup = () => {
         setError("username", usernameMessage);
         setError("fullName", fullNameMessage);
       }
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      setCommonErrorMessage(error.message);
     }
   };
 
@@ -120,6 +120,9 @@ const Signup = () => {
         <div className="container__button-container">
           <CustomButton label="Sign up" onClick={signup} />
         </div>
+        {commonErrorMessage && (
+          <span className="container__error">{commonErrorMessage}</span>
+        )}
       </div>
       <div className="container__link">
         Already have an account? <a href="/login">Log in</a>
