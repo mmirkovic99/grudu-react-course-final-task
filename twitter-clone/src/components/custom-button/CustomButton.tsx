@@ -1,4 +1,4 @@
-import "./CustomButton.css";
+import styles from "../../styles/Button.module.css";
 
 type CustomButtonProps = {
   onClick: Function;
@@ -7,7 +7,7 @@ type CustomButtonProps = {
 
 const CustomButton = ({ onClick, label }: CustomButtonProps) => {
   return (
-    <button className="custom-button" onClick={() => onClick()}>
+    <button className={styles.button} onClick={() => onClick()}>
       {label}
     </button>
   );

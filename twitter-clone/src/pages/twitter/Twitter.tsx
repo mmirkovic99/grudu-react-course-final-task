@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import HeaderNavigation from "../../components/header-navigation/HeaderNavigation";
-import "./Twitter.css";
+import twitterStyles from "../../styles/Twitter.module.css";
+import errorStyles from "../../styles/Twitter.module.css";
 import CustomInput from "../../components/custom-input/CustomInput";
 import CustomButton from "../../components/custom-button/CustomButton";
 import TweetCard from "../../components/tweet/Tweet";
@@ -17,13 +18,13 @@ const Twitter = () => {
   return (
     <>
       <HeaderNavigation userFullName={user?.name} />
-      <main className="twitter-contet">
+      <main className={twitterStyles.twitterContet}>
         {(errorMessage || commonErrorMessage) && (
-          <span className="twitter-contet__error">
+          <span className={errorStyles.contetError}>
             {errorMessage || commonErrorMessage}
           </span>
         )}
-        <div className="new-tweet">
+        <div>
           <CustomInput
             value={newTweetState.newTweet.value}
             placeholder="What’s happening?"

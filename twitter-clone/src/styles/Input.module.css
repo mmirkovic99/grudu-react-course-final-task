@@ -1,38 +1,31 @@
-.input__container {
+.inputContainer {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 }
 
-.input__container .input__field,
-.input__container .input__teaxtarea {
+.inputContainer .inputField,
+.inputContainer .inputTeaxtarea {
   font-size: 28px;
   border: 2px solid #42434b;
   border-radius: 8px;
 }
 
-.input__container .input__field {
+.inputContainer .inputField {
   width: 428px;
   height: 55px;
   padding-left: 20px;
   margin: 10px;
 }
 
-.input__container .input__teaxtarea {
+.inputContainer .inputTeaxtarea {
   width: 736px !important;
   height: 120px !important;
   padding: 20px;
   resize: none;
 }
 
-.input__container .input__error {
+.inputContainer .inputError {
   border-color: rgb(135, 3, 3);
-}
-
-.input__container .input__error-label {
-  font-size: 12px;
-  display: block;
-  width: 95%;
-  color: rgb(135, 3, 3);
 }

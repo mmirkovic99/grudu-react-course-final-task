@@ -1,4 +1,5 @@
-import "../../styles/Container.css";
+import containerStyles from "../../styles/Container.module.css";
+import errorStyles from "../../styles/Error.module.css";
 import CustomInput from "../../components/custom-input/CustomInput";
 import { useContext, useState } from "react";
 import { LoginState } from "./interface/login.interface";
@@ -39,9 +40,9 @@ const Login = () => {
   };
 
   return (
-    <div className="container">
-      <div className=" container__content">
-        <div className="container__title"> Log in</div>
+    <div className={containerStyles.container}>
+      <div className={containerStyles.containerContent}>
+        <div className={containerStyles.containerTitle}> Log in</div>
         <CustomInput
           value={loginState.username.value}
           placeholder="Username"
@@ -58,13 +59,15 @@ const Login = () => {
           onInputTouch={() => handleInputTouch("password")}
         />
         {commonErrorMessage && (
-          <span className="container__error">{commonErrorMessage}</span>
+          <span className={errorStyles.containerError}>
+            {commonErrorMessage}
+          </span>
         )}
-        <div className="container__button-container">
+        <div className={containerStyles.containerButtonContainer}>
           <CustomButton label="Log in" onClick={login} />
         </div>
       </div>
-      <div className="container__link">
+      <div className={containerStyles.containerLink}>
         Don't have an account? <a href="/signup">Sign up</a>
       </div>
     </div>

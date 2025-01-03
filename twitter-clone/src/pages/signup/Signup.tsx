@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import CustomInput from "../../components/custom-input/CustomInput";
-import "../../styles/Container.css";
+import containerStyles from "../../styles/Container.module.css";
+import errorStyles from "../../styles/Error.module.css";
 import { SignupData } from "./interfaces/signup.interfaces";
 import {
   SIGNUP_INPUT_FILEDS,
@@ -99,9 +100,9 @@ const Signup = () => {
   };
 
   return (
-    <div className="container">
-      <div className="container__content">
-        <div className="container__title"> Sign up</div>
+    <div className={containerStyles.container}>
+      <div className={containerStyles.containerContent}>
+        <div className={containerStyles.containerTitle}> Sign up</div>
         {Object.entries(SIGNUP_INPUT_FILEDS).map(([key, label]) => (
           <CustomInput
             key={key}
@@ -117,14 +118,16 @@ const Signup = () => {
             }}
           />
         ))}
-        <div className="container__button-container">
+        <div className={containerStyles.containerButtonContainer}>
           <CustomButton label="Sign up" onClick={signup} />
         </div>
         {commonErrorMessage && (
-          <span className="container__error">{commonErrorMessage}</span>
+          <span className={errorStyles.containerError}>
+            {commonErrorMessage}
+          </span>
         )}
       </div>
-      <div className="container__link">
+      <div className={containerStyles.containerLink}>
         Already have an account? <a href="/login">Log in</a>
       </div>
     </div>

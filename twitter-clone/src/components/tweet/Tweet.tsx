@@ -1,4 +1,4 @@
-import "./Tweet.css";
+import styles from "../../styles/Tweet.module.css";
 import DOMPurify from "dompurify";
 
 const TweetCard = ({ author = "", text = "" }) => {
@@ -10,14 +10,14 @@ const TweetCard = ({ author = "", text = "" }) => {
     return authorsInitials;
   };
   return (
-    <div className="tweet">
-      <div className="tweet__avatar-wrapper">
-        <div className="tweet__avatar">{getAuthorsInitials()}</div>
+    <div className={styles.tweet}>
+      <div className={styles.tweetAvatarWrapper}>
+        <div className={styles.tweetAvatar}>{getAuthorsInitials()}</div>
       </div>
-      <div className="tweet__content">
-        <div className="tweet__author">{author}</div>
+      <div className={styles.tweetContent}>
+        <div className={styles.tweetAuthor}>{author}</div>
         <div
-          className="tweet__text"
+          className={styles.tweetText}
           dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(text) }}
         ></div>
       </div>

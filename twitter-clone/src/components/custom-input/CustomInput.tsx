@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import "./CustomInput.css";
+import inputStyles from "../../styles/Input.module.css";
+import errorStyles from "../../styles/Error.module.css";
 
 interface CustomInputProps {
   type?: string;
@@ -35,10 +36,12 @@ const CustomInput: React.FC<CustomInputProps> = ({
   };
 
   return (
-    <div className="input__container">
+    <div className={inputStyles.inputContainer}>
       {isRegularInput && (
         <input
-          className={`input__field ${error ? "input__error" : ""}`}
+          className={`${inputStyles.inputField} ${
+            error ? inputStyles.inputError : ""
+          }`}
           type={type}
           placeholder={placeholder}
           onChange={onInputChange}
@@ -49,12 +52,14 @@ const CustomInput: React.FC<CustomInputProps> = ({
       {!isRegularInput && (
         <textarea
           value={value}
-          className={`input__teaxtarea ${error ? "input__error" : ""}`}
+          className={`${inputStyles.inputTeaxtarea} ${
+            error ? inputStyles.inputError : ""
+          }`}
           placeholder={placeholder}
           onChange={onTextAreaChange}
         ></textarea>
       )}
-      {error && <span className="input__error-label">{error}</span>}
+      {error && <span className={errorStyles.inputErrorLabel}>{error}</span>}
     </div>
   );
 };

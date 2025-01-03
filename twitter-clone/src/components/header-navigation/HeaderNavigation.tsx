@@ -1,4 +1,4 @@
-import "./HeaderNavigation.css";
+import styles from "../../styles/Navigation.module.css";
 
 const HeaderNavigation = ({ userFullName = "Miroslav Mirkovic" }) => {
   const getUsersInitials = () => {
@@ -10,10 +10,10 @@ const HeaderNavigation = ({ userFullName = "Miroslav Mirkovic" }) => {
   };
 
   return (
-    <header>
-      <div className="logo-container">
+    <header className={styles.navigation}>
+      <div className={styles.logoContainer}>
         <svg
-          className="logo-container__icon"
+          className={styles.logoContainerIcon}
           width="39"
           height="32"
           viewBox="0 0 39 32"
@@ -25,11 +25,11 @@ const HeaderNavigation = ({ userFullName = "Miroslav Mirkovic" }) => {
             />
           </g>
         </svg>
-        <div className="logo-container__text">Another Twitter Clone</div>
+        <div className={styles.logoContainerText}>Another Twitter Clone</div>
       </div>
-      <div className="user-container">
-        <span className="user-container__name">{userFullName}</span>
-        <div className="user-container__avatar">{getUsersInitials()}</div>
+      <div className={styles.userContainer}>
+        <span className={styles.logoContainerName}>{userFullName}</span>
+        <div className={styles.userContainerAvatar}>{getUsersInitials()}</div>
       </div>
     </header>
   );
