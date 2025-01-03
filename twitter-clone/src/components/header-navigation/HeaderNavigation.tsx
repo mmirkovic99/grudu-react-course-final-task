@@ -1,13 +1,9 @@
 import "./HeaderNavigation.css";
-import { useContext } from "react";
-import { UserContext } from "../../context/UserContext";
 
-const HeaderNavigation = () => {
-  const { user } = useContext(UserContext) || { user: null };
-
+const HeaderNavigation = ({ userFullName = "Miroslav Mirkovic" }) => {
   const getUsersInitials = () => {
-    const spaceIndex = user?.name.indexOf(" ") || -1;
-    const userNamesInitials = `${user?.name.charAt(0)}${user?.name.charAt(
+    const spaceIndex = userFullName.indexOf(" ") || -1;
+    const userNamesInitials = `${userFullName.charAt(0)}${userFullName.charAt(
       spaceIndex + 1
     )}`;
     return userNamesInitials;
@@ -32,7 +28,7 @@ const HeaderNavigation = () => {
         <div className="logo-container__text">Another Twitter Clone</div>
       </div>
       <div className="user-container">
-        <span className="user-container__name">{user?.name}</span>
+        <span className="user-container__name">{userFullName}</span>
         <div className="user-container__avatar">{getUsersInitials()}</div>
       </div>
     </header>

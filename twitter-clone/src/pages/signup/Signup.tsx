@@ -11,7 +11,7 @@ import { User } from "../../common/interfaces/user.interface";
 import { useNavigate } from "react-router-dom";
 import { apiService } from "../../services/apiService";
 import { validatorService } from "../../services/validatorService";
-import useInputHandlers from "../../hooks/InputHandlers";
+import useInputHandlers from "../../hooks/useInputHandlers";
 import { UserContext } from "../../context/UserContext";
 
 const Signup = () => {

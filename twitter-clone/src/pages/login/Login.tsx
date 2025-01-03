@@ -8,7 +8,7 @@ import { User } from "../../common/interfaces/user.interface";
 import CustomButton from "../../components/custom-button/CustomButton";
 import { useNavigate } from "react-router-dom";
 import { apiService } from "../../services/apiService";
-import useInputHandlers from "../../hooks/InputHandlers";
+import useInputHandlers from "../../hooks/useInputHandlers";
 import { UserContext } from "../../context/UserContext";
 
 const Login = () => {
